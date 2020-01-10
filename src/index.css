@@ -8,3 +8,28 @@ h1 {
 p {
     font-size: 1.2em;
 }
+
+.data-controls {
+    margin-bottom: 20px;
+}
+.data-controls select {
+    padding: 5px;
+    margin-right: 5px;
+}
+.data-controls .input {
+    width: 80%;
+}
+tr.is-selected td {
+    text-decoration: line-through;
+}
+
+tr.is-selected td.control-buttons {
+    text-decoration: none;
+}
+
+button {
+    margin-right: 0.5em;
+}
+button.is-small {
+    font-size: 0.9rem;
+}
