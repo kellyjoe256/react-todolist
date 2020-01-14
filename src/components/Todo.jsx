@@ -20,6 +20,11 @@ export default class Todo extends Component {
             },
             tasks: [],
             errors: [],
+            queryParams: {
+                page: 1,
+                perPage: 5,
+                search: '',
+            },
         };
 
         this.onEdit = this.onEdit.bind(this);
@@ -27,6 +32,8 @@ export default class Todo extends Component {
         this.onCompletion = this.onCompletion.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.onSearch = this.onSearch.bind(this);
+        this.onChangeLimit = this.onChangeLimit.bind(this);
     }
 
     componentDidMount() {
@@ -65,9 +72,35 @@ export default class Todo extends Component {
         this.saveTask(taskToComplete);
     }
 
+    onSearch(value) {
+        const { queryParams } = this.state;
+
+        queryParams.page = 1;
+        queryParams.search = value;
+        this.setState({ queryParams });
+
+        this.getTasks();
+    }
+
+    onChangeLimit(limit) {
+        const { queryParams } = this.state;
+
+        queryParams.page = 1;
+        queryParams.perPage = parseInt(limit, 10);
+        this.setState({ queryParams });
+
+        this.getTasks();
+    }
+
     getTasks() {
+        let url = 'tasks';
+        const query = this.parseQueryParams();
+        if (query) {
+            url = `${url}?${query}`;
+        }
+
         axios
-            .get('tasks')
+            .get(url)
             .then(({ data }) => {
                 this.setState({
                     meta: data.meta,
@@ -131,6 +164,31 @@ export default class Todo extends Component {
         this.saveTask(task);
     }
 
+    // setQueryParam(field, value) {
+    //     this.queryParams[field] = value;
+    // }
+
+    parseQueryParams() {
+        let output = '';
+        const { queryParams } = this.state;
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const [key, value] of Object.entries(queryParams)) {
+            if (value) {
+                output += output ? `&${key}=${value}` : `${key}=${value}`;
+            }
+        }
+
+        return output;
+        // Object.entries(this.queryParams).forEach((entry) => {
+        //     const [key, value] = entry;
+        //     if (value) {
+        //         output += output ? `&${key}=${value}` : `${key}=${value}`;
+        //     }
+        // });
+        // return output;
+    }
+
     render() {
         const { meta, task, tasks, errors } = this.state;
 
@@ -154,6 +212,8 @@ export default class Todo extends Component {
                             onEdit={this.onEdit}
                             onDelete={this.onDelete}
                             onCompletion={this.onCompletion}
+                            onSearch={this.onSearch}
+                            onChangeLimit={this.onChangeLimit}
                         />
                     </div>
                 </div>

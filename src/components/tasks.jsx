@@ -80,7 +80,12 @@ class Tasks extends Component {
                                         onCompletion(task);
                                     }}
                                 >
-                                    Mark as complete
+                                    Mark as
+                                    {` ${
+                                        !task.completed
+                                            ? 'complete'
+                                            : 'incomplete'
+                                    }`}
                                 </button>
                             </td>
                         </tr>
@@ -91,12 +96,16 @@ class Tasks extends Component {
     }
 
     render() {
-        const { meta } = this.props;
+        const { meta, onSearch, onChangeLimit } = this.props;
         // prettier-ignore
         return (
             <>
                 <div className="data-controls">
-                    <select>
+                    <select
+                        onChange={(e) => {
+                            onChangeLimit(e.target.value);
+                        }}
+                    >
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="15">15</option>
@@ -107,6 +116,9 @@ class Tasks extends Component {
                         type="text"
                         className="input"
                         placeholder="Search..."
+                        onKeyUp={(e) => {
+                            onSearch(e.target.value.trim());
+                        }}
                     />
                 </div>
                 {this.renderTasks()}
@@ -122,6 +134,8 @@ Tasks.propTypes = {
     onEdit: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
     onCompletion: PropTypes.func.isRequired,
+    onSearch: PropTypes.func.isRequired,
+    onChangeLimit: PropTypes.func.isRequired,
 };
 
 export default Tasks;
