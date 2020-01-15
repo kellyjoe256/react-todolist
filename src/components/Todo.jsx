@@ -34,6 +34,7 @@ export default class Todo extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onSearch = this.onSearch.bind(this);
         this.onChangeLimit = this.onChangeLimit.bind(this);
+        this.onPageChange = this.onPageChange.bind(this);
     }
 
     componentDidMount() {
@@ -87,6 +88,15 @@ export default class Todo extends Component {
 
         queryParams.page = 1;
         queryParams.perPage = parseInt(limit, 10);
+        this.setState({ queryParams });
+
+        this.getTasks();
+    }
+
+    onPageChange(page) {
+        const { queryParams } = this.state;
+
+        queryParams.page = parseInt(page, 10);
         this.setState({ queryParams });
 
         this.getTasks();
@@ -164,10 +174,6 @@ export default class Todo extends Component {
         this.saveTask(task);
     }
 
-    // setQueryParam(field, value) {
-    //     this.queryParams[field] = value;
-    // }
-
     parseQueryParams() {
         let output = '';
         const { queryParams } = this.state;
@@ -180,13 +186,6 @@ export default class Todo extends Component {
         }
 
         return output;
-        // Object.entries(this.queryParams).forEach((entry) => {
-        //     const [key, value] = entry;
-        //     if (value) {
-        //         output += output ? `&${key}=${value}` : `${key}=${value}`;
-        //     }
-        // });
-        // return output;
     }
 
     render() {
@@ -214,6 +213,7 @@ export default class Todo extends Component {
                             onCompletion={this.onCompletion}
                             onSearch={this.onSearch}
                             onChangeLimit={this.onChangeLimit}
+                            onPageChange={this.onPageChange}
                         />
                     </div>
                 </div>

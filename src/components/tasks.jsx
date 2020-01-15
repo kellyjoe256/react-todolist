@@ -96,7 +96,7 @@ class Tasks extends Component {
     }
 
     render() {
-        const { meta, onSearch, onChangeLimit } = this.props;
+        const { meta, onSearch, onChangeLimit, onPageChange } = this.props;
         // prettier-ignore
         return (
             <>
@@ -122,7 +122,9 @@ class Tasks extends Component {
                     />
                 </div>
                 {this.renderTasks()}
-                {meta.total_pages > 1 ? <Paginate meta={meta} /> : null}
+                {meta.total_pages > 1
+                    ? <Paginate meta={meta} onPageChange={onPageChange} />
+                    : null}
             </>
         );
     }
@@ -136,6 +138,7 @@ Tasks.propTypes = {
     onCompletion: PropTypes.func.isRequired,
     onSearch: PropTypes.func.isRequired,
     onChangeLimit: PropTypes.func.isRequired,
+    onPageChange: PropTypes.func.isRequired,
 };
 
 export default Tasks;
